@@ -1,19 +1,14 @@
 # 项目简述
-识别广告图片中的产品和文字，自动生成结构化数据集，详细信息见[Our Website](http://47.98.47.1/LabelMeAnnotationTool/external.html)
+根据广告场景/产品图颜色，来自动化的配色广告图片[Our Website](http://47.98.47.1/LabelMeAnnotationTool/external.html)
+在主函数ColorChange.py 中，可以通过修改广告的类别关键词，内容关键词，产品图颜色，来调整生成结果的颜色。
+算法的数据输入为colorForBanner.csv，详见[Our Website](http://47.98.47.1/LabelMeAnnotationTool/download.html)
 
 # 环境
 - Python2.7
-- cython
-- Caffe
-
-环境配置参考：[FCIS](https://github.com/msracver/FCIS)和[CTPN](https://github.com/tianzhi0549/CTPN)
-
-# 模型下载：
-产品识别模型(大约233M)下载：[OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMJZmVOEDgfde8_tg)或者[BaiduYun](https://pan.baidu.com/s/1geOHioV)(密码为tmd4)，把模型放入文件夹 `model`中并重命名为`fcis_coco-0000.params`
-
-字体识别模型 (大约78M) 下载：[Google Drive](https://drive.google.com/open?id=0B7c5Ix-XO7hqQWtKQ0lxTko4ZGs), 把模型放入文件夹 `models`中并重命名为` ctpn_trained_model.caffemodel`
 
 # 运行方式
-`python ./segmentation/infoExtraction.py`
+`python ./ColorChange.py
+
+PS:相关的参数输入，请在主函数源码中修改
 
 Enjoy It!
