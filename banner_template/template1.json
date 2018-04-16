@@ -1,0 +1,34 @@
+{
+    "backgroundColor": "transparent",
+    "children": [
+        {
+            "height": 600,
+            "label": "background",
+            "left": 0,
+            "src": "//ubanner.alicdn.com/1/1/1.png",
+            "top": 0,
+            "width": 1920,
+            "zIndex": 1
+        },
+        {
+            "height": 600,
+            "label": "title1",
+            "left": 0,
+            "src": "//ubanner.alicdn.com/1/1/2.png",
+            "top": 0,
+            "width": 1920,
+            "zIndex": 2
+        },
+        {
+            "height": 600,
+            "label": "element",
+            "left": 0,
+            "src": "//ubanner.alicdn.com/1/1/3.png",
+            "top": 0,
+            "width": 1920,
+            "zIndex": 3
+        }
+    ],
+    "height": 600,
+    "width": 1920
+}
