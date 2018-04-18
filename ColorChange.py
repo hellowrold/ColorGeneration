@@ -203,7 +203,7 @@ class backgroundColor():
 
         random_state = 170
 
-        hue_km = KMeans(n_clusters = 3 , random_state = random_state)
+        hue_km = KMeans(n_clusters = 5 , random_state = random_state)
         hue_km.fit(self.arraybackH)
         self.hue_labels = hue_km.labels_
         self.hue_cluster_centers = hue_km.cluster_centers_
@@ -216,7 +216,7 @@ class backgroundColor():
             sumNum = num
             self.hue_percentage.append(percenta/float(total))
 
-        sat_km = KMeans(n_clusters = 3 , random_state = random_state)
+        sat_km = KMeans(n_clusters = 5 , random_state = random_state)
         sat_km.fit(self.arraybackS)
         self.sat_labels = sat_km.labels_
         self.sat_cluster_centers = sat_km.cluster_centers_
@@ -229,7 +229,7 @@ class backgroundColor():
             sumNum = num
             self.sat_percentage.append(percenta/float(total))
 
-        val_km = KMeans(n_clusters = 3 , random_state = random_state)
+        val_km = KMeans(n_clusters = 5 , random_state = random_state)
         val_km.fit(self.arraybackV)
         self.val_labels = val_km.labels_
         self.val_cluster_centers = val_km.cluster_centers_
@@ -247,7 +247,7 @@ class backgroundColor():
     #def getdatafitHSVdistance(self,datapath):
 
 class textColor():
-    def __init__(self,data):
+    def train(self,data):
 
         backlight = []
         textlight = []
@@ -302,28 +302,28 @@ class textColor():
 
         random_state = 170
 
-        light_km = KMeans(n_clusters = 10 , random_state = random_state)
+        light_km = KMeans(n_clusters = 5 , random_state = random_state)
         light_km.fit(self.arraytextLight)
         self.light_labels = light_km.labels_
         self.light_cluster_centers = light_km.cluster_centers_
 
-        color_km = KMeans(n_clusters = 10 , random_state = random_state)
+        color_km = KMeans(n_clusters = 5 , random_state = random_state)
         color_km.fit(self.arraytextcolor)
         color_labels = color_km.labels_
         self.color_labels = np.array(color_labels)
         self.color_cluster_centers = color_km.cluster_centers_
 
-        hue_km = KMeans(n_clusters = 10 , random_state = random_state)
+        hue_km = KMeans(n_clusters = 5 , random_state = random_state)
         hue_km.fit(self.arraytextHue)
         self.hue_labels = hue_km.labels_
         self.hue_cluster_centers = hue_km.cluster_centers_
 
-        sat_km = KMeans(n_clusters = 10 , random_state = random_state)
+        sat_km = KMeans(n_clusters = 5 , random_state = random_state)
         sat_km.fit(self.arraytextSat)
         self.sat_labels = sat_km.labels_
         self.sat_cluster_centers = sat_km.cluster_centers_
 
-        val_km = KMeans(n_clusters = 10 , random_state = random_state)
+        val_km = KMeans(n_clusters = 5 , random_state = random_state)
         val_km.fit(self.arraytextVal)
         self.val_labels = val_km.labels_
         self.val_cluster_centers = val_km.cluster_centers_
@@ -346,7 +346,7 @@ class textColor():
             probas = classifier.predict_proba(self.inputlight)
             
             preData = []
-            for i in range(10):
+            for i in range(5):
                 for j in range(int(probas[0,i]*1000)):
                     preData.append(self.light_cluster_centers[i,0])
             preData = np.array(preData)[:, np.newaxis]
@@ -364,7 +364,7 @@ class textColor():
             #print probas
             
             preData = []
-            for i in range(10):
+            for i in range(5):
                 for j in range(int(probas[0,i]*1000)):
                     preData.append(self.color_cluster_centers[i])
             preData = np.array(preData)
@@ -394,7 +394,7 @@ class textColor():
             probas = classifier.predict_proba(self.inputH)
             
             preData = []
-            for i in range(10):
+            for i in range(5):
                 for j in range(int(probas[0,i]*1000)):
                     preData.append(self.hue_cluster_centers[i,0])
             preData = np.array(preData)[:, np.newaxis]
@@ -412,7 +412,7 @@ class textColor():
             #print probas
             
             preData = []
-            for i in range(10):
+            for i in range(5):
                 for j in range(int(probas[0,i]*1000)):
                     preData.append(self.sat_cluster_centers[i])
             preData = np.array(preData)
@@ -427,7 +427,7 @@ class textColor():
             #print probas
             
             preData = []
-            for i in range(10):
+            for i in range(5):
                 for j in range(int(probas[0,i]*1000)):
                     preData.append(self.val_cluster_centers[i])
             preData = np.array(preData)
@@ -557,21 +557,22 @@ def colorDistance(sourceColor, targetColor):
 
 if __name__ == '__main__':
 
-    template = './banner_template/template5.json'
+    #template = './banner_template/template5.json'
     #template = './banner_template/template5-black.json' #19,15,18
     #template = './banner_template/template5-red.json' #108,1,2
     #template = './banner_template/template5-green.json' #1,175,139
     #template = './banner_template/template5-yellow.json' #240,203,92
     #template = './banner_template/template5-pink.json' #226,165,152
     #template = './banner_template/template5-blue.json' #1,52,161
+    template = './banner_template/template5-orange.json' #250,94,26
 
     csvFile = open("./colorForBanner.csv", "r")
     reader = csv.reader(csvFile)
     backgroundData = []
     textData = []
 
-    keywords = "女装"
-    productcolor = [0,0,0]
+    keywords = "橘色产品"
+    productcolor = [250,94,26]
 
     for item in reader:
 
@@ -581,9 +582,10 @@ if __name__ == '__main__':
         description = item[2].decode("gbk").encode("utf-8")
 
         productColor = json.loads(item[5])
+        colorDist = colorDistance(productcolor,productColor)
 
-        #if colorDistance(productcolor,productColor)<40:
-        if colorDistance(productcolor,productColor)<40 and category == keywords:
+        if colorDist<40:
+        #if colorDistance(productcolor,productColor)<40 and category == keywords:
         #if category == keywords:
             #print filename
         #if keywords in description:
@@ -606,80 +608,96 @@ if __name__ == '__main__':
             eachBackgroundData['backV']= v
             eachBackgroundData['backL']= l
             eachBackgroundData['backAb']= [a,b]
+            eachBackgroundData['colorDist']= colorDist
             #eachdata['textColor']= textColor
+            #weight = 1+int((40-colorDist)*0.1)
+            #weight = 1
+            #print weight
+            #for num in range(weight):
             backgroundData.append(eachBackgroundData)
             
-            #-------------字体色采集---------------
-            textColors = json.loads(item[4])
-            for eachText in textColors:
-                eachTextData = {}
-                textR = eachText["textcolor_R"]
-                textG = eachText["textcolor_G"]
-                textB = eachText["textcolor_B"]
-                textbackground_R = eachText["backgroundcolor_R"]
-                textbackground_G = eachText["backgroundcolor_G"]
-                textbackground_B = eachText["backgroundcolor_B"]
-                
-                if textR < 0:
-                    textR = 0
-                if textG < 0:
-                    textG = 0
-                if textB < 0:
-                    textB = 0
-                if textR > 255:
-                    textR = 255
-                if textG > 255:
-                    textG = 255
-                if textB > 255:
-                    textB = 255
-                
-                if textbackground_R < 0:
-                    textbackground_R = 0
-                if textbackground_G < 0:
-                    textbackground_G = 0
-                if textbackground_B < 0:
-                    textbackground_B = 0
-                if textbackground_R > 255:
-                    textbackground_R = 255
-                if textbackground_G > 255:
-                    textbackground_G = 255
-                if textbackground_B > 255:
-                    textbackground_B = 255
-                
-                
-                bh,bs,bv = RGB_to_HSL(textbackground_R,textbackground_G,textbackground_B)
-                th,ts,tv = RGB_to_HSL(textR,textG,textB)
-                #CIELab channel
-                rgb_color = [[[textbackground_R/255.0, textbackground_G/255.0, textbackground_B/255.0]]]  # parameter between 0-1
-                lab_color = color.rgb2lab(rgb_color,illuminant='D65', observer='2')
-                bl = lab_color[0][0][0] # 0-100
-                ba = lab_color[0][0][1] # -128 - 128
-                bb = lab_color[0][0][2] # -128 - 128
-                rgb_color = [[[textR/255.0, textG/255.0, textB/255.0]]]  # parameter between 0-1
-                lab_color = color.rgb2lab(rgb_color,illuminant='D65', observer='2')
-                tl = lab_color[0][0][0] # 0-100
-                ta = lab_color[0][0][1] # -128 - 128
-                tb = lab_color[0][0][2] # -128 - 128
+        #-------------字体色采集---------------
+        textColors = json.loads(item[4])
+        for eachText in textColors:
+            eachTextData = {}
+            textR = eachText["textcolor_R"]
+            textG = eachText["textcolor_G"]
+            textB = eachText["textcolor_B"]
+            textbackground_R = eachText["backgroundcolor_R"]
+            textbackground_G = eachText["backgroundcolor_G"]
+            textbackground_B = eachText["backgroundcolor_B"]
+            
+            if textR < 0:
+                textR = 0
+            if textG < 0:
+                textG = 0
+            if textB < 0:
+                textB = 0
+            if textR > 255:
+                textR = 255
+            if textG > 255:
+                textG = 255
+            if textB > 255:
+                textB = 255
+            
+            if textbackground_R < 0:
+                textbackground_R = 0
+            if textbackground_G < 0:
+                textbackground_G = 0
+            if textbackground_B < 0:
+                textbackground_B = 0
+            if textbackground_R > 255:
+                textbackground_R = 255
+            if textbackground_G > 255:
+                textbackground_G = 255
+            if textbackground_B > 255:
+                textbackground_B = 255
+            
+            
+            bh,bs,bv = RGB_to_HSL(textbackground_R,textbackground_G,textbackground_B)
+            th,ts,tv = RGB_to_HSL(textR,textG,textB)
+            #CIELab channel
+            rgb_color = [[[textbackground_R/255.0, textbackground_G/255.0, textbackground_B/255.0]]]  # parameter between 0-1
+            lab_color = color.rgb2lab(rgb_color,illuminant='D65', observer='2')
+            bl = lab_color[0][0][0] # 0-100
+            ba = lab_color[0][0][1] # -128 - 128
+            bb = lab_color[0][0][2] # -128 - 128
+            rgb_color = [[[textR/255.0, textG/255.0, textB/255.0]]]  # parameter between 0-1
+            lab_color = color.rgb2lab(rgb_color,illuminant='D65', observer='2')
+            tl = lab_color[0][0][0] # 0-100
+            ta = lab_color[0][0][1] # -128 - 128
+            tb = lab_color[0][0][2] # -128 - 128
 
-                eachTextData['text_backH']= bh
-                eachTextData['text_backS']= bs
-                eachTextData['text_backV']= bv
-                eachTextData['text_backL']= bl
-                eachTextData['text_backAb']= [ba,bb]
-                eachTextData['textH']= th
-                eachTextData['textS']= ts
-                eachTextData['textV']= tv
-                eachTextData['textL']= tl
-                eachTextData['textAb']= [ta,tb]
-                textData.append(eachTextData)
+            eachTextData['text_backColor']= [textbackground_R,textbackground_G,textbackground_B]
+            eachTextData['text_backH']= bh
+            eachTextData['text_backS']= bs
+            eachTextData['text_backV']= bv
+            eachTextData['text_backL']= bl
+            eachTextData['text_backAb']= [ba,bb]
+            eachTextData['textH']= th
+            eachTextData['textS']= ts
+            eachTextData['textV']= tv
+            eachTextData['textL']= tl
+            eachTextData['textAb']= [ta,tb]
+            textData.append(eachTextData)
                 
     print "done" 
 
+    backgroundDataLen = len(backgroundData)
+    backgroundExpaneddata = []
+
+    WeightRatio = 0.1*1000/backgroundDataLen
+    for each in backgroundData:
+        weight = 1+int((40-each['colorDist'])*0.1*WeightRatio)
+        for num in range(weight):
+            backgroundExpaneddata.append(each)
+
     backgroundColor = backgroundColor()
-    textColor = textColor(textData)
+    textColor = textColor() 
+    
 
     #wholeimage_backlight_kde, wholeimage_backcolor_kde = backgroundColor.getdatafitLab(backgroundData)
-    wholeimage_backH_kde, wholeimage_backS_kde, wholeimage_backV_kde = backgroundColor.getdatafitHSV(backgroundData)
+    wholeimage_backH_kde, wholeimage_backS_kde, wholeimage_backV_kde = backgroundColor.getdatafitHSV(backgroundExpaneddata)
 
     hue_cluster_centers, hue_percentage, sat_cluster_centers, sat_percentage, val_cluster_centers, val_percentage = backgroundColor.getBackgroundColorDistribution(backgroundData)
 
@@ -757,9 +775,6 @@ if __name__ == '__main__':
     score_copy.sort(reverse=True)
     #print total_color
 
-    #text优化
-    hue_cluster_centers, hue_percentage, sat_cluster_centers, sat_percentage, val_cluster_centers, val_percentage = textColor.getTextColorDistribution()
-
     for i in range(0,4):
         index = total_score.index(score_copy[i])
 
@@ -767,6 +782,29 @@ if __name__ == '__main__':
 
         total_score_text = []
         total_color_text = []
+
+
+        fitTextDataTemp = []
+        for each in textData:
+            rgbcolor = each['text_backColor']
+            colordist = colorDistance(total_color[index]['background'],[rgbcolor])
+            if colordist < 40:
+                each["colorDist"] = colordist
+                fitTextDataTemp.append(each)
+
+        textDataLen = len(fitTextDataTemp)
+        fitTextData = []
+        WeightRatio = 0.1*1000/textDataLen
+        for each in fitTextDataTemp:
+            weight = 1+int((40-each["colorDist"])*WeightRatio)
+            for num in range(weight):
+                fitTextData.append(each)
+
+
+
+        #text优化
+        textColor.train(fitTextData) 
+        hue_cluster_centers, hue_percentage, sat_cluster_centers, sat_percentage, val_cluster_centers, val_percentage = textColor.getTextColorDistribution()
 
         h,s,l = RGB_to_HSL(total_color[index]['background'][0],total_color[index]['background'][1],total_color[index]['background'][2])
 
